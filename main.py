@@ -59,7 +59,7 @@ for name in painter_icon_names:
         icon = np.ones((ICON_SIZE, ICON_SIZE, 3), np.uint8) * 128
     painter_icons.append(icon)
 # Adjusted positions so all 6 icons fit within 640px width
-painter_icon_positions = [(10, 20), (120, 20), (230, 20), (340, 20), (450, 20), (560, 20)]
+painter_icon_positions = [(10, 20), (115, 20), (220, 20), (325, 20), (430, 20), (535, 20)]
 painter_options = dict(zip(
     ["red", "green", "blue", "thick", "thin", "eraser"],
     zip(painter_icon_positions, painter_icons)
@@ -240,8 +240,14 @@ while True:
                     xp, yp = 0, 0
 
             # Overlay the canvas (drawing) on the webcam feed with icons
-            img = overlay_canvas(painter_img,
-                                 img_canvas)
+            img = overlay_canvas(painter_img, img_canvas)
+
+            # --- Save the paint if 's' is pressed ---
+            key = cv2.waitKey(1) & 0xFF
+            if key == ord('s'):
+                ts = datetime.now().strftime("%Y%m%d_%H%M%S")
+                cv2.imwrite(f"Screenshots/paint_{ts}.png", img_canvas)
+                print(f"[Painter] Saved paint_{ts}.png")
 
         elif current_mode == "scroll":
             if fingers[1] and fingers[2] and not fingers[3]:  # 2 fingers up
